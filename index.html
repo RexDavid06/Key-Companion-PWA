@@ -1,32 +1,56 @@
 <!doctype html>
-<html lang="en"><head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Keys Companion</title>
-<link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#0b2024">
-<link rel="icon" href="icons/icon-192.png">
-<link rel="apple-touch-icon" href="icons/icon-192.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css"></head>
-<body><main>
-<div class="top"><h1>Keys Companion</h1><button class="btn" id="conn">Connect keyboard</button></div>
-<p class="status" id="st">Plug in a MIDI keyboard, or play the keys below.</p>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b2024">
+  <meta name="description" content="A musical companion for pianists. Connect a MIDI keyboard and play along with pads or an ocarina vamp.">
+  <title>Keys Companion</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
+  <link rel="apple-touch-icon" href="./icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <main>
+    <div class="top">
+      <h1>Keys Companion</h1>
+      <button class="btn" id="conn">Connect keyboard</button>
+    </div>
+    <p class="status" id="st">Plug in a MIDI keyboard, or play the keys below.</p>
 
-<div class="chord"><b id="cn">–</b><span id="cs">Play two or more keys to name a chord</span></div>
+    <div class="chord"><b id="cn">–</b><span id="cs">Play two or more keys to name a chord</span></div>
 
-<div class="panel">
- <div class="row"><span class="lbl">Sound</span>
-  <div class="seg" id="mode"><button data-v="pad" aria-pressed="true">Pad</button><button data-v="ocarina" aria-pressed="false">Ocarina</button></div></div>
- <div class="row" style="margin-top:10px"><span class="lbl">Rhythm</span>
-  <div class="seg" id="style"><button data-v="reggae" aria-pressed="true">Reggae</button><button data-v="makossa" aria-pressed="false">Makossa</button><button data-v="ariaria" aria-pressed="false">Ariaria</button></div></div>
- <div class="row" style="margin-top:10px"><span class="lbl">Tempo</span>
-  <button class="sm" id="dn" aria-label="Slower">−</button><span class="bpm" id="bpm">90</span><button class="sm" id="up" aria-label="Faster">+</button>
-  <button class="sm" id="auto" style="width:auto;padding:0 12px;font-size:14px" aria-pressed="true">Auto: on</button></div>
-</div>
+    <div class="panel">
+      <div class="row">
+        <span class="lbl">Sound</span>
+        <div class="seg" id="mode">
+          <button data-v="pad" aria-pressed="true">Pad</button>
+          <button data-v="ocarina" aria-pressed="false">Ocarina</button>
+        </div>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <span class="lbl">Rhythm</span>
+        <div class="seg" id="style">
+          <button data-v="reggae" aria-pressed="true">Reggae</button>
+          <button data-v="makossa" aria-pressed="false">Makossa</button>
+          <button data-v="ariaria" aria-pressed="false">Ariaria</button>
+        </div>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <span class="lbl">Tempo</span>
+        <button class="sm" id="dn" aria-label="Slower">−</button>
+        <span class="bpm" id="bpm">90</span>
+        <button class="sm" id="up" aria-label="Faster">+</button>
+        <button class="sm" id="auto" style="width:auto;padding:0 12px;font-size:14px" aria-pressed="true">Auto: on</button>
+      </div>
+    </div>
 
-<div class="piano" id="piano"></div>
-<p class="hint">Computer keys also work: A S D F G H J K for white keys, W E T Y U for black. The ocarina starts when you play and fades after a few seconds of silence. This is a first prototype, so the patterns are simple and ready to grow.</p>
-</main>
-<script src="app.js"></script></body></html>
+    <div class="piano" id="piano" aria-label="On-screen piano"></div>
+    <p class="hint">Computer keys also work: A S D F G H J K for white keys, W E T Y U for black. The ocarina starts when you play and fades after a few seconds of silence. Connect a MIDI keyboard for the best experience.</p>
+  </main>
+  <script src="./app.js"></script>
+</body>
+</html>
