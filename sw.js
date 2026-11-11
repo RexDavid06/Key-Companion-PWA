@@ -1,9 +1,17 @@
-const CACHE_NAME = 'keys-companion-v1';
+const CACHE_NAME = 'keys-companion-v4';
 const APP_SHELL = [
   './',
   './index.html',
   './style.css',
-  './app.js',
+  './js/app.js',
+  './js/audio.js',
+  './js/theory.js',
+  './js/rhythm.js',
+  './js/midi.js',
+  './js/pad.js',
+  './js/ocarina.js',
+  './js/piano.js',
+  './js/soundlab.js',
   './manifest.webmanifest',
   './icon-192.png',
   './icon-512.png'

@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#0b2024">
-  <meta name="description" content="A musical companion for pianists. Connect a MIDI keyboard and play along with pads or an ocarina vamp.">
+  <meta name="description" content="A real-time intelligent accompaniment app for pianists. Connect a MIDI keyboard and the app follows your chords, key and tempo with a pad or ocarina vamp.">
   <title>Keys Companion</title>
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
@@ -14,43 +14,164 @@
   <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-  <main>
+  <main id="kc-app">
     <div class="top">
       <h1>Keys Companion</h1>
-      <button class="btn" id="conn">Connect keyboard</button>
+      <div class="leds">
+        <span class="led" id="ledDetect" title="Detecting notes"></span>
+        <span class="led play" id="ledPlay" title="Accompaniment playing"></span>
+      </div>
     </div>
-    <p class="status" id="st">Plug in a MIDI keyboard, or play the keys below.</p>
 
-    <div class="chord"><b id="cn">–</b><span id="cs">Play two or more keys to name a chord</span></div>
-
-    <div class="panel">
+    <section class="panel">
       <div class="row">
-        <span class="lbl">Sound</span>
-        <div class="seg" id="mode">
-          <button data-v="pad" aria-pressed="true">Pad</button>
-          <button data-v="ocarina" aria-pressed="false">Ocarina</button>
+        <span class="lbl">Input</span>
+        <button class="btn" id="conn">Connect MIDI</button>
+        <select id="midiSel" class="sel" aria-label="MIDI input device">
+          <option value="auto">All inputs</option>
+        </select>
+      </div>
+      <p class="status" id="st">Plug in a MIDI keyboard and press Connect MIDI, or play the keys below.</p>
+    </section>
+
+    <section class="panel detect">
+      <div class="row spread">
+        <span class="lbl">Key</span><b class="key" id="keyName">–</b>
+        <span class="bpmbox">
+          <span class="lbl">BPM</span><b class="bpm" id="bpm">90</b>
+          <button class="sm" id="dn" aria-label="Slower">−</button>
+          <button class="sm" id="up" aria-label="Faster">+</button>
+          <button class="sm wide" id="auto" aria-pressed="true">Auto: on</button>
+        </span>
+      </div>
+      <div class="confwrap"><i id="conf"></i></div>
+      <div class="chord"><b id="cn">–</b><span id="cs">Play two or more keys to name a chord</span></div>
+      <div class="prog" id="prog" aria-label="Chord progression"></div>
+    </section>
+
+    <section class="panel">
+      <div class="seg big" id="mode" role="group" aria-label="Accompaniment instrument">
+        <button data-v="pad" aria-pressed="true">Pad</button>
+        <button data-v="ocarina" aria-pressed="false">Ocarina</button>
+      </div>
+
+      <div id="padPanel">
+        <div class="row" style="margin-top:10px">
+          <span class="lbl">Texture</span>
+          <div class="seg" id="texture" role="group" aria-label="Pad texture">
+            <button data-v="warm" aria-pressed="true">Warm</button>
+            <button data-v="glass" aria-pressed="false">Glass</button>
+            <button data-v="strings" aria-pressed="false">Strings</button>
+            <button data-v="choir" aria-pressed="false">Choir</button>
+          </div>
+        </div>
+        <div class="row" style="margin-top:10px">
+          <span class="lbl">Volume</span>
+          <input type="range" id="padVol" min="0" max="100" value="80" class="rng">
+          <span class="val" id="padVolVal">80%</span>
+        </div>
+        <div class="row">
+          <span class="lbl">Attack</span>
+          <input type="range" id="padAtk" min="20" max="2000" value="600" step="10" class="rng">
+          <span class="val" id="padAtkVal">0.60s</span>
+        </div>
+        <div class="row">
+          <span class="lbl">Release</span>
+          <input type="range" id="padRel" min="100" max="4000" value="1200" step="10" class="rng">
+          <span class="val" id="padRelVal">1.20s</span>
         </div>
       </div>
-      <div class="row" style="margin-top:10px">
-        <span class="lbl">Rhythm</span>
-        <div class="seg" id="style">
-          <button data-v="reggae" aria-pressed="true">Reggae</button>
-          <button data-v="makossa" aria-pressed="false">Makossa</button>
-          <button data-v="ariaria" aria-pressed="false">Ariaria</button>
+
+      <div id="ocaPanel" hidden>
+        <div class="row" style="margin-top:10px">
+          <span class="lbl">Rhythm</span>
+          <div class="seg" id="styleSeg" role="group" aria-label="Ocarina rhythm style">
+            <button data-v="makossa" aria-pressed="true">Makossa</button>
+            <button data-v="ariaria" aria-pressed="false">Araria</button>
+          </div>
+        </div>
+        <div class="row" style="margin-top:10px">
+          <span class="lbl">Volume</span>
+          <input type="range" id="ocaVol" min="0" max="100" value="80" class="rng">
+          <span class="val" id="ocaVolVal">80%</span>
+        </div>
+        <div class="row">
+          <span class="lbl">Activity</span>
+          <input type="range" id="ocaInt" min="0" max="100" value="60" class="rng">
+          <span class="val" id="ocaIntVal">60%</span>
         </div>
       </div>
-      <div class="row" style="margin-top:10px">
-        <span class="lbl">Tempo</span>
-        <button class="sm" id="dn" aria-label="Slower">−</button>
-        <span class="bpm" id="bpm">90</span>
-        <button class="sm" id="up" aria-label="Faster">+</button>
-        <button class="sm" id="auto" style="width:auto;padding:0 12px;font-size:14px" aria-pressed="true">Auto: on</button>
+    </section>
+
+    <section class="panel">
+      <div class="row">
+        <button class="btn primary" id="play" aria-pressed="false">Start accompaniment</button>
+        <button class="sm wide" id="mute" aria-pressed="false">Mute</button>
       </div>
-    </div>
+      <div class="row" style="margin-top:10px">
+        <span class="lbl">Master</span>
+        <input type="range" id="masterVol" min="0" max="100" value="75" class="rng">
+        <span class="val" id="masterVolVal">75%</span>
+        <button class="btn danger" id="panic">■ Stop all</button>
+      </div>
+    </section>
+
+    <section class="panel" id="soundlab" hidden>
+      <div class="row spread">
+        <span class="lbl">Sound lab</span>
+        <button class="btn danger sm" id="labStop">■ Stop all</button>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <span class="lbl">Volume</span>
+        <input type="range" id="labVol" min="0" max="100" value="75" class="rng">
+        <span class="val" id="labVolVal">75%</span>
+        <button class="sm wide" id="labStopPad">Stop pad</button>
+        <button class="sm wide" id="labStopOca">Stop ocarina</button>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <span class="lbl">Pad</span>
+        <div class="seg" id="labPad" role="group" aria-label="Pad examples">
+          <button data-v="note">Single note</button>
+          <button data-v="maj">C major</button>
+          <button data-v="min">C minor</button>
+          <button data-v="maj7">C maj7</button>
+          <button data-v="walk">C–Am–F–G</button>
+        </div>
+      </div>
+      <div class="row">
+        <span class="lbl">Texture</span>
+        <div class="seg" id="labTex" role="group" aria-label="Pad texture">
+          <button data-v="warm" aria-pressed="true">Warm</button>
+          <button data-v="glass" aria-pressed="false">Glass</button>
+          <button data-v="strings" aria-pressed="false">Strings</button>
+          <button data-v="choir" aria-pressed="false">Choir</button>
+        </div>
+      </div>
+      <div class="row">
+        <span class="lbl">Ocarina</span>
+        <div class="seg" id="labOca" role="group" aria-label="Ocarina examples">
+          <button data-v="c5">C5</button>
+          <button data-v="g5">G5</button>
+          <button data-v="c6">C6</button>
+          <button data-v="run">Run</button>
+          <button data-v="makossa">Makossa</button>
+          <button data-v="ariaria">Araria</button>
+        </div>
+      </div>
+      <div class="row">
+        <span class="lbl">BPM</span>
+        <div class="seg" id="labBpm" role="group" aria-label="Sound lab tempo">
+          <button data-v="70">70</button>
+          <button data-v="100" aria-pressed="true">100</button>
+          <button data-v="130">130</button>
+        </div>
+      </div>
+      <p class="status">Developer sound tests. Open this page with ?lab in the URL to show this panel.</p>
+    </section>
 
     <div class="piano" id="piano" aria-label="On-screen piano"></div>
-    <p class="hint">Computer keys also work: A S D F G H J K for white keys, W E T Y U for black. The ocarina starts when you play and fades after a few seconds of silence. Connect a MIDI keyboard for the best experience.</p>
+    <p class="hint">Computer keys also work: A S D F G H J K for white keys, W E T Y U for black. The ocarina phrases and rests follow your tempo; the pad follows your chords. Use the sustain pedal as usual — it is tracked.</p>
   </main>
-  <script src="./app.js"></script>
+  <script type="module" src="./js/app.js"></script>
 </body>
 </html>
