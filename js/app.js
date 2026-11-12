@@ -359,5 +359,10 @@ export function bootBrowser() {
 }
 
 if (typeof document !== 'undefined' && document.getElementById('kc-app')) {
+  if ('serviceWorker' in navigator) {
+    addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js', { updateViaCache: 'none' }).catch(() => {});
+    });
+  }
   bootBrowser();
 }
